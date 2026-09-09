@@ -1,5 +1,3 @@
-import { TokenPayload } from "../lib/auth.js";
-
 export interface WorkspaceContext {
     workspaceId: string;
     role?: string;

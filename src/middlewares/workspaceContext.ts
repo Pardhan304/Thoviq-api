@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../lib/prisma.js";
+import { getErrorMessage } from "../lib/errors.js";
 
 export function requireWorkspace(_minimumRole?: string) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -45,10 +46,10 @@ export function requireWorkspace(_minimumRole?: string) {
             };
 
             next();
-        } catch (err: any) {
+        } catch (err: unknown) {
             res.status(500).json({
                 success: false,
-                message: err.message || "Failed to resolve workspace context",
+                message: getErrorMessage(err) || "Failed to resolve workspace context",
             });
         }
     };

@@ -18,7 +18,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
         };
 
         next();
-    } catch (err: any) {
+    } catch (_err: unknown) {
         res.status(401).json({ success: false, message: "Unauthorized: Invalid or expired token" });
     }
 }

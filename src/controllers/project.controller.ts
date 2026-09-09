@@ -5,6 +5,7 @@ import {
     updateProjectSchema,
     migrateProjectSchema,
 } from "../schemas/project.schema.js";
+import { getErrorMessage } from "../lib/errors.js";
 
 export async function list(req: Request, res: Response): Promise<void> {
     try {
@@ -13,8 +14,8 @@ export async function list(req: Request, res: Response): Promise<void> {
 
         const projects = await projectService.listProjects(workspaceId, userId);
         res.status(200).json({ success: true, projects });
-    } catch (err: any) {
-        res.status(400).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(400).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -25,8 +26,8 @@ export async function getById(req: Request, res: Response): Promise<void> {
 
         const project = await projectService.getProjectById(projectId, workspaceId);
         res.status(200).json({ success: true, project });
-    } catch (err: any) {
-        res.status(404).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(404).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -38,8 +39,8 @@ export async function create(req: Request, res: Response): Promise<void> {
 
         const project = await projectService.createProject(workspaceId, userId, input);
         res.status(201).json({ success: true, project });
-    } catch (err: any) {
-        res.status(400).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(400).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -51,8 +52,8 @@ export async function update(req: Request, res: Response): Promise<void> {
 
         const project = await projectService.updateProject(projectId, workspaceId, input);
         res.status(200).json({ success: true, project });
-    } catch (err: any) {
-        res.status(400).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(400).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -75,8 +76,8 @@ export async function migrate(req: Request, res: Response): Promise<void> {
             message: "Project migrated successfully",
             project,
         });
-    } catch (err: any) {
-        res.status(400).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(400).json({ success: false, message: getErrorMessage(err) });
     }
 }
 

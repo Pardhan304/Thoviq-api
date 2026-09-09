@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service.js";
 import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
+import { getErrorMessage } from "../lib/errors.js";
 
 const COOKIE_NAME = "thoviq_refresh";
 
@@ -22,8 +23,8 @@ export async function register(req: Request, res: Response): Promise<void> {
             user: result.user,
             accessToken: result.accessToken,
         });
-    } catch (err: any) {
-        res.status(400).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(400).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -38,8 +39,8 @@ export async function login(req: Request, res: Response): Promise<void> {
             user: result.user,
             accessToken: result.accessToken,
         });
-    } catch (err: any) {
-        res.status(401).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(401).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
@@ -54,8 +55,8 @@ export async function refresh(req: Request, res: Response): Promise<void> {
         const tokens = await authService.refreshTokens(token);
         res.cookie(COOKIE_NAME, tokens.refreshToken, cookieOptions);
         res.status(200).json({ success: true, accessToken: tokens.accessToken });
-    } catch (err: any) {
-        res.status(401).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+        res.status(401).json({ success: false, message: getErrorMessage(err) });
     }
 }
 
